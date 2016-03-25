@@ -13,7 +13,7 @@ module TestHutch
           TestHutch.fake!
         elsif example.metadata[:hutch] == :inline
           TestHutch.inline!
-        elsif example.metadata[:type] == :acceptance
+        elsif example.metadata[:type].in? [:acceptance, :features]
           TestHutch.inline!
         else
           TestHutch.disabled!
