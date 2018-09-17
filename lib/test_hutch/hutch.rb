@@ -72,15 +72,19 @@ module TestHutch
     end
 
     def load_consumers
-      Dir.glob("#{Rails.root}/app/consumers/*.rb").each do |path|
+      Dir.glob(File.join(consumers_path, "**", "*_consumer.rb")).each do |path|
         load_consumer(path)
       end
     end
 
     def load_consumer(path)
-      file_name = File.basename(path, ".rb")
-      consumer_class = file_name.camelize.safe_constantize
+      file_name = path.gsub(consumers_path, "").gsub(".rb", "")
+      consumer_class = file_name.classify.constantize
       register_consumer(consumer_class)
+    end
+
+    def consumers_path
+      "#{Rails.root}/app/consumers/"
     end
 
     # Possible improvement: if Hutch actually supports it,
